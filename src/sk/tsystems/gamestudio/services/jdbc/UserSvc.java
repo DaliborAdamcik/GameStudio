@@ -67,5 +67,11 @@ public class UserSvc extends jdbcConnector implements UserService {
 		return true;
 	}
 
+	@Override
+	public UserEntity addUser(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

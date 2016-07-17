@@ -11,5 +11,6 @@ public interface UserService  extends AutoCloseable {
 	UserEntity getUser(int id);
 	UserEntity getUser(String name);
 	UserEntity me();
+	UserEntity addUser(String name);// TODO: temporary 
 	
 }

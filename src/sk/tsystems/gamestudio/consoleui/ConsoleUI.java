@@ -2,11 +2,15 @@ package sk.tsystems.gamestudio.consoleui;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import sk.tsystems.gamestudio.entity.CommentEntity;
 import sk.tsystems.gamestudio.entity.GameEntity;
+import sk.tsystems.gamestudio.entity.RatingEntity;
 import sk.tsystems.gamestudio.entity.ScoreEntity;
+import sk.tsystems.gamestudio.entity.UserEntity;
 import sk.tsystems.gamestudio.services.GameService;
+import sk.tsystems.gamestudio.services.RatingService;
 import sk.tsystems.gamestudio.services.ScoreService;
 import sk.tsystems.gamestudio.services.UserService;
 import sk.tsystems.gamestudio.services.CommentService;
@@ -17,13 +21,15 @@ public class ConsoleUI extends ConsoleInput {
 	private UserService users;
 	private CommentService comments;
 	private ScoreService scores;
+	private RatingService ratings;
 	
-	public ConsoleUI(GameService games, UserService users, CommentService comments, ScoreService scores) {
+	public ConsoleUI(GameService games, UserService users, CommentService comments, ScoreService scores, RatingService ratings) {
 		super();
 		this.games = games;
 		this.users = users;
 		this.comments = comments;
 		this.scores = scores;
+		this.ratings = ratings;
 	}
 	
 	public void run()
@@ -55,6 +61,26 @@ public class ConsoleUI extends ConsoleInput {
 						commentAdder(games.getGame(1));
 						commentsShow(games.getGame(1));
 						break;
+						
+					case 'w': // test add score into table
+						ScoreEntity sco = new ScoreEntity(games.getGame(1), users.me(), 10);
+						scores.addScore(sco);
+						for(ScoreEntity s : scores.topScores(games.getGame(1)))
+						{
+							System.out.println(s);
+						}
+						break;
+						
+					case 'q': // test add rate into table
+						Random ra = new Random();
+						UserEntity usr = users.addUser("rnd_usr_"+ra.nextInt(100));
+						
+						System.out.println(usr);
+
+						RatingEntity rat = new RatingEntity(games.getGame(1), usr, 10);
+						ratings.addRating(rat);
+						ratings.gameRating(games.getGame(1));
+						break;
 					default:
 						System.out.println("!! Ivalid menu option.");
 						break;
@@ -72,7 +98,7 @@ public class ConsoleUI extends ConsoleInput {
 		System.out.println(" e,x: Exit");
 		
 		for(GameEntity game: games.listGames())
-			System.out.printf("\t%2d: RUN %s game (id: %d, cls: %s)\r\n", optcount++, game.getName(), game.getID(), game.className());
+			System.out.printf("\t%2d: RUN %s game (id: %d, cls: %s) rating %f\r\n", optcount++, game.getName(), game.getID(), game.className(), ratings.gameRating(game));
 
 		return optcount-1;
 	}

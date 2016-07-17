@@ -16,15 +16,15 @@ public class GameSvc extends JpaConnector implements GameService {
 	public GameEntity getGame(int id) {
 		try
 		{
-			EntityManager em = JpaConnector.getEntityManager();
-			JpaConnector.beginTransaction();
+			EntityManager em = getEntityManager();
+			beginTransaction();
 
 			Query que = em.createQuery("SELECT g FROM GameEntity g WHERE g.id = :id").setParameter("id", id);
 			return (GameEntity) que.getSingleResult();
 		}
 		finally
 		{
-			JpaConnector.commitTransaction();
+			commitTransaction();
 		}
 	}
 
@@ -33,25 +33,26 @@ public class GameSvc extends JpaConnector implements GameService {
 	public List<GameEntity> listGames() {
 		try
 		{
-			EntityManager em = JpaConnector.getEntityManager();
-			JpaConnector.beginTransaction();
+			EntityManager em = getEntityManager();
+			beginTransaction();
 
 			Query que = em.createQuery("SELECT g FROM GameEntity g");
 		
-			return  que.getResultList();
+			return que.getResultList();
 		}
 		finally
 		{
-			JpaConnector.commitTransaction();
+			commitTransaction();
 		}
 	}
 
 	@Override
 	public boolean addGame(GameEntity game) {
-		EntityManager em = JpaConnector.getEntityManager();
-		JpaConnector.beginTransaction();
+		// TODO we need to set game.setID(0) there
+		EntityManager em = getEntityManager();
+		beginTransaction();
 		em.persist(game);
-		JpaConnector.commitTransaction();
+		commitTransaction();
 		return true; // TODO
 	}
 

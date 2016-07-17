@@ -3,8 +3,7 @@ package sk.tsystems.gamestudio.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name="USERS_JPA")
-//@Embeddable 
+@Table(name="JPA_USERS")
 public class UserEntity {
 	@Id
 	@Column(name = "USRID")
@@ -27,4 +26,10 @@ public class UserEntity {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public String toString() {
+		return "UserEntity [id=" + id + ", name=" + name + "]";
+	}
+	
 }

@@ -4,45 +4,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import sk.tsystems.gamestudio.entity.CommentEntity;
 import sk.tsystems.gamestudio.entity.GameEntity;
 import sk.tsystems.gamestudio.entity.UserEntity;
 import sk.tsystems.gamestudio.services.CommentService;
-import sk.tsystems.gamestudio.services.GameService;
-import sk.tsystems.gamestudio.services.UserService;
 
 public class CommentSvc extends JpaConnector implements CommentService  {
-
-	public CommentSvc(UserService us, GameService ga) {
-		// TODO Auto-generated constructor stub
+	int limitcomments = 10;
+	public CommentSvc() {
 	}
 
 	@Override
 	public boolean addComment(CommentEntity comment) {
-		EntityManager em = JpaConnector.getEntityManager();
-		JpaConnector.beginTransaction();
+		comment.setID(0); // on add we set zero ID, JPA sets new one
+		EntityManager em = getEntityManager();
+		beginTransaction();
 		em.persist(comment);
-		JpaConnector.commitTransaction();
+		commitTransaction();
 
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<CommentEntity> commentsFor(GameEntity game) {
 		try
 		{
-			EntityManager em = JpaConnector.getEntityManager();
-			JpaConnector.beginTransaction();
+			EntityManager em = getEntityManager();
+			beginTransaction();
 
-			Query que = em.createQuery("SELECT c FROM CommentEntity c WHERE c.game = :game").setParameter("game", game).setMaxResults(10);
+			Query que = em.createQuery("SELECT c FROM CommentEntity c WHERE c.game = :game").setParameter("game", game).setMaxResults(limitcomments);
 		
-			return (List<CommentEntity>) que.getResultList();
+			return que.getResultList();
+		}
+		catch (NoResultException e) {
+			return new ArrayList<CommentEntity>();
 		}
 		finally
 		{
-			JpaConnector.commitTransaction();
+			commitTransaction();
 		}
 	}
 
@@ -54,7 +57,7 @@ public class CommentSvc extends JpaConnector implements CommentService  {
 
 	@Override
 	public void setLimit(int limit) {
-		// TODO Auto-generated method stub
-
+		if (limit>0)
+		limitcomments = limit; 
 	}
 }

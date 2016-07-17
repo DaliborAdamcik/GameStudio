@@ -1,13 +1,35 @@
 package sk.tsystems.gamestudio.entity;
 
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import sk.tsystems.gamestudio.entity.UserEntity;
 import sk.tsystems.gamestudio.entity.GameEntity;
 
+@Entity
+@Table(name="JPA_SCORE")
 public class ScoreEntity  {
-	private Date date;
+	@Id
+	@GeneratedValue
+	@Column(name = "SCOID")
+	int ident; // not used in class, only for JPA 
+	
+	@Column(name = "SCORE")
 	private int score;
+	@Column(name = "SCDAT")
+	private Date date;
+	@OneToOne
+	@JoinColumn(name="GAMEID")
 	private GameEntity game;
+	@OneToOne
+	@JoinColumn(name="USRID")
 	private UserEntity user;
 	
 	public ScoreEntity(GameEntity game, UserEntity user, int score, Date datum) {
@@ -37,8 +59,9 @@ public class ScoreEntity  {
 	public UserEntity getUser() {
 		return user;
 	}
-	
 
-
-
+	@Override
+	public String toString() {
+		return "ScoreEntity [user=" + user + ", date=" + date + ", score=" + score + "]";
+	}
 }

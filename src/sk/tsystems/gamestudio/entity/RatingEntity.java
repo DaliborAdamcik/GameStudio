@@ -1,11 +1,30 @@
 package sk.tsystems.gamestudio.entity;
 import sk.tsystems.gamestudio.entity.UserEntity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import sk.tsystems.gamestudio.entity.GameEntity;
 
+@Entity
+@Table(name="JPA_RATING")
 public class RatingEntity {
+	@Id
+	@GeneratedValue
+	@Column(name = "RATID")
 	private int id;
+	@Column(name = "RATPOINTS")
 	private int rating;
+	@OneToOne
+	@JoinColumn(name="GAMEID")
 	private GameEntity game;
+	@OneToOne
+	@JoinColumn(name="USRID")
 	private UserEntity user;
 	
 	public RatingEntity(GameEntity game, UserEntity user, int rating, int id) {
@@ -17,7 +36,7 @@ public class RatingEntity {
 	}
 	
 	public RatingEntity(GameEntity game, UserEntity user, int rating) {
-		this(game, user, rating, -1);
+		this(game, user, rating, 0);
 	}
 
 	public int getID() {
@@ -26,6 +45,10 @@ public class RatingEntity {
 
 	public void setID(int id) {
 		this.id = id;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
 	}
 
 	public int getRating() {

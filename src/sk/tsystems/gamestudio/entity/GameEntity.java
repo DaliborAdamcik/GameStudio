@@ -4,11 +4,8 @@ import javax.persistence.*;
 import sk.tsystems.gamestudio.consoleui.ConsoleUiRun;
 
 @Entity
-@Table(name="GAMES_JPA")
-//@Embeddable
+@Table(name="JPA_GAMES")
 public class GameEntity {
-//	private int ident;
-
 	@Id
 	@Column(name = "GAMEID")
 	@GeneratedValue

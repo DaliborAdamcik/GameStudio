@@ -9,7 +9,7 @@ import sk.tsystems.gamestudio.entity.UserEntity;
 public interface RatingService extends AutoCloseable {
 	
 	void addRating(RatingEntity rating);
-	void myRating(GameEntity game, UserEntity user);
+	RatingEntity myRating(GameEntity game, UserEntity user);
 	double gameRating(GameEntity game);
 	List<RatingEntity> ratings();
 	

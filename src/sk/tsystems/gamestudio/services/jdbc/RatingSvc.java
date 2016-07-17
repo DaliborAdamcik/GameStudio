@@ -20,7 +20,8 @@ public class RatingSvc extends jdbcConnector implements RatingService {
 	}
 
 	@Override
-	public void myRating(GameEntity game, UserEntity user) {
+	public RatingEntity myRating(GameEntity game, UserEntity user) {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}

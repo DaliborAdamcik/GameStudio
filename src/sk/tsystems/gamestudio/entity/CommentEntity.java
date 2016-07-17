@@ -9,11 +9,7 @@ import sk.tsystems.gamestudio.entity.GameEntity;
 
 
 @Entity
-@Table(name="COMMENT_JPA")
-/*@SecondaryTables({
-@SecondaryTable(name="USERS_JPA", pkJoinColumns={@PrimaryKeyJoinColumn(name="USRID")}),
-@SecondaryTable(name="GAMES_JPA", pkJoinColumns={@PrimaryKeyJoinColumn(name="GAMID")})
-})*/
+@Table(name="JPA_COMMENT")
 public class CommentEntity {
 
 	@Id
@@ -24,16 +20,10 @@ public class CommentEntity {
 	private Date date;
 	@Column(name = "COMTXT")
 	private String comment;
-	//@Column(table="GAMES_JPA")
-	//@Embedded
-	//@ManyToOne(fetch=FetchType.LAZY)
-	@OneToOne//(mappedBy = "id")
+	@OneToOne
 	@JoinColumn(name="GAMEID")
 	private GameEntity game;
-	//@Column(table="USERS_JPA")
-	//@Embedded
-	//@ManyToOne(fetch=FetchType.LAZY)
-	@OneToOne//(mappedBy = "id")
+	@OneToOne
 	@JoinColumn(name="USRID")
 	private UserEntity user;
 

@@ -2,7 +2,9 @@ package sk.tsystems.gamestudio.services.jpa;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import sk.tsystems.gamestudio.entity.GameEntity;
 import sk.tsystems.gamestudio.entity.ScoreEntity;
 import sk.tsystems.gamestudio.services.ScoreService;
@@ -15,14 +17,31 @@ public class ScoreSvc extends JpaConnector implements ScoreService {
 
 	@Override
 	public boolean addScore(ScoreEntity score) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		EntityManager em = getEntityManager();
+		beginTransaction();
+		em.persist(score);
+		commitTransaction();
 
+		return true; // TODO when returns false?
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ScoreEntity> topScores(GameEntity game) {
-		// TODO Auto-generated method stub
-		return new ArrayList<ScoreEntity>();
+		try
+		{
+			EntityManager em = getEntityManager();
+			beginTransaction();
+			Query que = em.createQuery("SELECT s FROM ScoreEntity s WHERE s.game = :game ORDER BY s.score").setParameter("game", game).setMaxResults(10);
+			return que.getResultList();
+		}
+		catch (NoResultException e) {
+			return new ArrayList<ScoreEntity>();
+		}
+		finally
+		{
+			commitTransaction();
+		}
 	}
 
 }

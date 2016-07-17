@@ -22,10 +22,10 @@ public class UserSvc extends JpaConnector implements UserService {
 		
 		current = usr;
 		
-		EntityManager em = JpaConnector.getEntityManager();
-		JpaConnector.beginTransaction();
+		EntityManager em = getEntityManager();
+		beginTransaction();
 		em.persist(usr);
-		JpaConnector.commitTransaction();
+		commitTransaction();
 		return true; // TODO
 	}
 
@@ -33,8 +33,8 @@ public class UserSvc extends JpaConnector implements UserService {
 	public UserEntity getUser(int id) {
 		try
 		{
-			EntityManager em = JpaConnector.getEntityManager();
-			JpaConnector.beginTransaction();
+			EntityManager em = getEntityManager();
+			beginTransaction();
 
 			Query que = em.createQuery("SELECT u FROM UserEntity u WHERE u.id = :id").setParameter("id", id);
 			return (UserEntity) que.getSingleResult();
@@ -44,7 +44,7 @@ public class UserSvc extends JpaConnector implements UserService {
 		}
 		finally
 		{
-			JpaConnector.commitTransaction();
+			commitTransaction();
 		}
 	}
 
@@ -52,8 +52,8 @@ public class UserSvc extends JpaConnector implements UserService {
 	public UserEntity getUser(String name) {
 		try
 		{
-			EntityManager em = JpaConnector.getEntityManager();
-			JpaConnector.beginTransaction();
+			EntityManager em = getEntityManager();
+			beginTransaction();
 			
 			Query que = em.createQuery("SELECT u FROM UserEntity u WHERE u.name = :name").setParameter("name", name);
 			return (UserEntity) que.getSingleResult();
@@ -63,13 +63,26 @@ public class UserSvc extends JpaConnector implements UserService {
 		}
 		finally
 		{
-			JpaConnector.commitTransaction();
+			commitTransaction();
 		}
 	}
 
 	@Override
 	public UserEntity me() {
 		return current;
+	}
+
+	@Override
+	public UserEntity addUser(String name) {
+		UserEntity usr = getUser(name);
+		if(usr==null)
+			usr = new UserEntity(0,name);
+		
+		EntityManager em = getEntityManager();
+		beginTransaction();
+		em.persist(usr);
+		commitTransaction();
+		return usr;
 	}
 
 }

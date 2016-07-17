@@ -5,7 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 abstract class JpaConnector implements AutoCloseable {
-	/*
+	/* TODO upravit komentar
 	 * postarat sa o ziskanie factory umoznit ziskanie entity manager zacatie
 	 * transakcie, ukoncenie transakcie uzatvorit faktory aj entity manager
 	 */
@@ -20,18 +20,18 @@ abstract class JpaConnector implements AutoCloseable {
 		return factory;
 	}
 
-	static EntityManager getEntityManager() {
+	EntityManager getEntityManager() {
 		if (entityManager == null || !entityManager.isOpen()) {
 			entityManager = getFactory().createEntityManager();
 		}
 		return entityManager;
 	}
 
-	static void beginTransaction() {
+	void beginTransaction() {
 		getEntityManager().getTransaction().begin();
 	}
 
-	static void commitTransaction() {
+	void commitTransaction() {
 		getEntityManager().getTransaction().commit();
 	}
 
@@ -46,11 +46,6 @@ abstract class JpaConnector implements AutoCloseable {
 			factory.close();
 		}
 	}
-
-/*	public static void closeAll() {
-		closeEntityManager();
-		closeEntityManagerFactory();
-	}*/
 	
 	@Override
 	public void close() throws Exception {

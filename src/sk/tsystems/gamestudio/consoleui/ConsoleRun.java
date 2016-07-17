@@ -1,5 +1,6 @@
 package sk.tsystems.gamestudio.consoleui;
 import sk.tsystems.gamestudio.services.GameService;
+import sk.tsystems.gamestudio.services.RatingService;
 import sk.tsystems.gamestudio.services.UserService;
 import sk.tsystems.gamestudio.entity.GameEntity;
 import sk.tsystems.gamestudio.services.CommentService;
@@ -12,8 +13,9 @@ public class ConsoleRun {
 		try(
 				GameService game = new sk.tsystems.gamestudio.services.jpa.GameSvc();
 				UserService user = new sk.tsystems.gamestudio.services.jpa.UserSvc();
-				CommentService comme = new sk.tsystems.gamestudio.services.jpa.CommentSvc(user, game);
+				CommentService comme = new sk.tsystems.gamestudio.services.jpa.CommentSvc();
 				ScoreService score =  new sk.tsystems.gamestudio.services.jpa.ScoreSvc();
+				RatingService rating = new sk.tsystems.gamestudio.services.jpa.RatingSvc();
 								
 //				GameService game = new sk.tsystems.gamestudio.services.jdbc.GameSvc();
 //				UserService user = new sk.tsystems.gamestudio.services.jdbc.UserSvc();
@@ -30,7 +32,7 @@ public class ConsoleRun {
 
 			
 			
-			ConsoleUI ui = new ConsoleUI(game, user, comme, score);
+			ConsoleUI ui = new ConsoleUI(game, user, comme, score, rating);
 			ui.run();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
