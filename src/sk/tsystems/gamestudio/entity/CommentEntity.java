@@ -47,7 +47,7 @@ public class CommentEntity {
 	}
 
 	public CommentEntity(GameEntity game, UserEntity user, String comment) {
-		this(game, user, comment, -1, new Date());
+		this(game, user, comment, 0, new Date());
 	}
 
 	public void setID(int id) {

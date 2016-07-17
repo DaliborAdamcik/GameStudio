@@ -1,5 +1,6 @@
 package sk.tsystems.gamestudio.services.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -33,9 +34,9 @@ public class CommentSvc extends JpaConnector implements CommentService  {
 		try
 		{
 			EntityManager em = JpaConnector.getEntityManager();
-		JpaConnector.beginTransaction();
+			JpaConnector.beginTransaction();
 
-		Query que = em.createQuery("SELECT c FROM CommentEntity c WHERE c.GameEntity = :game").setParameter("Game", game).setMaxResults(10);
+			Query que = em.createQuery("SELECT c FROM CommentEntity c WHERE c.game = :game").setParameter("game", game).setMaxResults(10);
 		
 			return (List<CommentEntity>) que.getResultList();
 		}

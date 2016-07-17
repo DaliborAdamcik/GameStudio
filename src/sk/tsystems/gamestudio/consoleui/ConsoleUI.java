@@ -1,5 +1,6 @@
 package sk.tsystems.gamestudio.consoleui;
 
+import java.util.Date;
 import java.util.List;
 
 import sk.tsystems.gamestudio.entity.CommentEntity;
@@ -47,6 +48,13 @@ public class ConsoleUI extends ConsoleInput {
 						running = false;
 						break;
 						
+					case 's': 
+						commentsShow(games.getGame(1));
+						break;
+					case 'a':
+						commentAdder(games.getGame(1));
+						commentsShow(games.getGame(1));
+						break;
 					default:
 						System.out.println("!! Ivalid menu option.");
 						break;
@@ -145,7 +153,7 @@ public class ConsoleUI extends ConsoleInput {
 		String com = this.readLine().trim();
 		if(com.length()>0)
 		{
-			comments.addComment(new CommentEntity(game, users.me(), com));
+			comments.addComment(new CommentEntity(game, users.me(), com, 0, new Date()));
 		}
 		commentsShow(game);
 	}
