@@ -1,16 +1,22 @@
 package sk.tsystems.gamestudio.entity;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import sk.tsystems.gamestudio.consoleui.ConsoleUiRun;
 
 @Entity
+@Table(name="GAMES_JPA")
+//@Embeddable
 public class GameEntity {
+//	private int ident;
+
 	@Id
+	@Column(name = "GAMEID")
 	@GeneratedValue
 	private int id;
+	
+	@Column(name = "GAMENAME")	
 	private String name;
+	@Column(name = "RUNNABLE")	
 	private Class<?> runnable = null;
 
 	public GameEntity(int id, String name) {

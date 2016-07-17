@@ -7,4 +7,5 @@ import sk.tsystems.gamestudio.entity.GameEntity;
 public interface GameService extends AutoCloseable {
 	GameEntity getGame(int id);
 	List<GameEntity> listGames();	
+	boolean addGame(GameEntity game);
 }

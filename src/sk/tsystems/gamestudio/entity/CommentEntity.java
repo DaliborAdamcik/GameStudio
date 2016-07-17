@@ -2,23 +2,39 @@ package sk.tsystems.gamestudio.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import sk.tsystems.gamestudio.entity.UserEntity;
 import sk.tsystems.gamestudio.entity.GameEntity;
 
 
 @Entity
+@Table(name="COMMENT_JPA")
+/*@SecondaryTables({
+@SecondaryTable(name="USERS_JPA", pkJoinColumns={@PrimaryKeyJoinColumn(name="USRID")}),
+@SecondaryTable(name="GAMES_JPA", pkJoinColumns={@PrimaryKeyJoinColumn(name="GAMID")})
+})*/
 public class CommentEntity {
 
 	@Id
 	@GeneratedValue
+	@Column(name = "COMID")
 	private int id;
+	@Column(name = "COMDATE")
 	private Date date;
+	@Column(name = "COMTXT")
 	private String comment;
+	//@Column(table="GAMES_JPA")
+	//@Embedded
+	//@ManyToOne(fetch=FetchType.LAZY)
+	@OneToOne//(mappedBy = "id")
+	@JoinColumn(name="GAMEID")
 	private GameEntity game;
+	//@Column(table="USERS_JPA")
+	//@Embedded
+	//@ManyToOne(fetch=FetchType.LAZY)
+	@OneToOne//(mappedBy = "id")
+	@JoinColumn(name="USRID")
 	private UserEntity user;
 
 	public CommentEntity(GameEntity game, UserEntity user, String comment, int id, Date date) {

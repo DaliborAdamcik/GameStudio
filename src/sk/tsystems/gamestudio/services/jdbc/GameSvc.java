@@ -15,21 +15,14 @@ public class GameSvc /*extends jdbcConnector*/ implements GameService {
 	public GameSvc() {
 		super();
 		games = new ArrayList<>();
-
-		GameEntity ga = new GameEntity(1, "Minesweeper");
-		ga.setRunnable(sk.tsystems.gamestudio.game.minesweeper.Minesweeper.class);
-		
-		games.add(ga);
-		games.add(new GameEntity(2, "Kamene"));
-		games.add(new GameEntity(3, "Uhadni cislo"));
 	}
 
 	@Override
 	public GameEntity getGame(int id) { 
-		if(id < 0 || id >= games.size())
-			return new GameEntity(id, "UNK_GAME_"+id);
+		if(id < 1 || id > games.size())
+			return null;
 
-		return games.get(id);
+		return games.get(id-1);
 	}
 
 	@Override
@@ -40,6 +33,12 @@ public class GameSvc /*extends jdbcConnector*/ implements GameService {
 	@Override
 	public void close() throws Exception {
 		
+	}
+
+	@Override
+	public boolean addGame(GameEntity game) {
+		games.add(game);
+		return true; // TODO
 	}
 
 }

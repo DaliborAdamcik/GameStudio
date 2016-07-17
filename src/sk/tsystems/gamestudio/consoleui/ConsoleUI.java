@@ -29,13 +29,15 @@ public class ConsoleUI extends ConsoleInput {
 	{
 		users.auth(askMyName()); // TODO
 		
+		System.out.println(users.me().getName()+" welcome in game center!");
+		
 		boolean running = true;
 		Object menuOpt;
 		do
 		{
 			menuOpt = getMenuOption(printMainMenu());
 			if(menuOpt instanceof Integer) // selected game
-				RunGame((Integer) menuOpt-1);
+				RunGame((Integer) menuOpt);
 			
 			if (menuOpt instanceof Character) {
 				switch(((Character) menuOpt).charValue())
@@ -95,8 +97,8 @@ public class ConsoleUI extends ConsoleInput {
 	
 	private String askMyName()
 	{
-		String name ="dalik";
-		System.out.println("TODO: my name is "+name); // TODO ask name
+		String name ="dalik"; // TODO
+		//System.out.println("TODO: my name is "+name); // TODO ask name
 		return name;
 	}
 	
