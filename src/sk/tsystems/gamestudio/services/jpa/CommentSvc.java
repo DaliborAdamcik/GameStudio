@@ -34,7 +34,7 @@ public class CommentSvc extends JpaConnector implements CommentService  {
 		try
 		{
 			EntityManager em = getEntityManager();
-			beginTransaction();
+			//beginTransaction();
 
 			Query que = em.createQuery("SELECT c FROM CommentEntity c WHERE c.game = :game").setParameter("game", game).setMaxResults(limitcomments);
 		
@@ -43,10 +43,10 @@ public class CommentSvc extends JpaConnector implements CommentService  {
 		catch (NoResultException e) {
 			return new ArrayList<CommentEntity>();
 		}
-		finally
+		/*finally
 		{
 			commitTransaction();
-		}
+		}*/
 	}
 
 	@Override

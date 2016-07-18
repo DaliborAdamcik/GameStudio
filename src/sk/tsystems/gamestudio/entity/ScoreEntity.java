@@ -32,6 +32,11 @@ public class ScoreEntity  {
 	@JoinColumn(name="USRID")
 	private UserEntity user;
 	
+	public ScoreEntity() // constructor for JPA
+	{
+		this(null, null, 0, null );
+	}
+	
 	public ScoreEntity(GameEntity game, UserEntity user, int score, Date datum) {
 		super();
 		this.game = game;

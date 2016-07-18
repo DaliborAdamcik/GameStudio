@@ -16,6 +16,11 @@ public class GameEntity {
 	@Column(name = "RUNNABLE")	
 	private Class<?> runnable = null;
 
+	public GameEntity() // constructor for JPA
+	{
+		this(0, null);
+	}
+	
 	public GameEntity(int id, String name) {
 		super();
 		this.id = id;

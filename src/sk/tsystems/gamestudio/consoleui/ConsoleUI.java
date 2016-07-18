@@ -34,73 +34,84 @@ public class ConsoleUI extends ConsoleInput {
 	
 	public void run()
 	{
-		users.auth(askMyName()); // TODO
+		users.auth(askMyName()); // TODO what to do on failure?
 		
-		System.out.println(users.me().getName()+" welcome in game center!");
+		System.out.println(":>> "+users.me().getName()+" welcome in game center!");
 		
 		boolean running = true;
 		Object menuOpt;
+		List<GameEntity> gamelist = games.listGames();
 		do
 		{
-			menuOpt = getMenuOption(printMainMenu());
+			printMainMenu(gamelist);
+			menuOpt = getMenuOption(gamelist.size());
 			if(menuOpt instanceof Integer) // selected game
-				RunGame((Integer) menuOpt);
+			{
+				System.out.println();
+				runGame(gamelist.get(((Integer) menuOpt)-1));
+			}
 			
 			if (menuOpt instanceof Character) {
 				switch(((Character) menuOpt).charValue())
 				{
-					case 'e':
-					case 'x': 
+					case 'q': 
 						running = false;
 						break;
-						
-					case 's': 
-						commentsShow(games.getGame(1));
-						break;
-					case 'a':
-						commentAdder(games.getGame(1));
-						commentsShow(games.getGame(1));
+					case 'r': // refresh game list
+						System.out.println(":: refresh game list");
+						gamelist = games.listGames();
 						break;
 						
-					case 'w': // test add score into table
-						ScoreEntity sco = new ScoreEntity(games.getGame(1), users.me(), 10);
+						
+						
+///////////////////////////////////////////////////// TEMP MENU ITEMS ///////////////////////////////////////////////////////////						
+					case 's': // TODO temp
+						commentsShow(gamelist.get(0));
+						break;
+					case 'a': // TODO temp
+						commentAdder(gamelist.get(0));
+						commentsShow(gamelist.get(0));
+						break;
+						
+					case 'w': // TODO test add score into table, temp
+						ScoreEntity sco = new ScoreEntity(gamelist.get(0), users.me(), 10);
 						scores.addScore(sco);
-						for(ScoreEntity s : scores.topScores(games.getGame(1)))
+						for(ScoreEntity s : scores.topScores(gamelist.get(0)))
 						{
 							System.out.println(s);
 						}
 						break;
 						
-					case 'q': // test add rate into table
+					case 't': // TODO test add rate into table temp
 						Random ra = new Random();
 						UserEntity usr = users.addUser("rnd_usr_"+ra.nextInt(100));
 						
 						System.out.println(usr);
 
-						RatingEntity rat = new RatingEntity(games.getGame(1), usr, 10);
+						RatingEntity rat = new RatingEntity(gamelist.get(0), usr, 10);
 						ratings.addRating(rat);
-						ratings.gameRating(games.getGame(1));
+						ratings.gameRating(gamelist.get(0));
 						break;
-					default:
+					default: // invalid option
 						System.out.println("!! Ivalid menu option.");
 						break;
 				}
 			}
+			System.out.println();
 		}
 		while(running);
 		System.out.println("....> Bye bye :-)");
 	}
 	
-	private int printMainMenu()
+	private void printMainMenu(List<GameEntity> gamelist)
 	{
 		System.out.println("...:> GAME STUDIO <:... maiN");
 		int optcount = 1;
-		System.out.println(" e,x: Exit");
+		System.out.println("\tq: Quit game studio");
+		System.out.println("\tr: Refresh game list");
 		
-		for(GameEntity game: games.listGames())
+		for(GameEntity game: gamelist)
 			System.out.printf("\t%2d: RUN %s game (id: %d, cls: %s) rating %f\r\n", optcount++, game.getName(), game.getID(), game.className(), ratings.gameRating(game));
-
-		return optcount-1;
 	}
 	
 	private Object getMenuOption(int maxmenu)
@@ -122,7 +133,7 @@ public class ConsoleUI extends ConsoleInput {
 				if (option.length()<1)
 					return null;
 				
-				return new Character(Character.toLowerCase(option.charAt(0))); 
+				return new Character(option.charAt(0)); 
 			}
 		
 		}
@@ -131,30 +142,32 @@ public class ConsoleUI extends ConsoleInput {
 	
 	private String askMyName()
 	{
-		String name ="dalik"; // TODO
-		//System.out.println("TODO: my name is "+name); // TODO ask name
+		System.out.println("Sign in GameCenter---->");
+		System.out.print("User name (default 'dalik'): ");
+		String name = this.readLine().trim(); // TODO check name for white spaces
+		if(name.length()==0)
+			return "dalik";
 		return name;
 	}
 	
-	private void RunGame(int id)
+	private void runGame(GameEntity game)
 	{
-		GameEntity ga = games.getGame(id);
-		System.out.println(">>>Run game: "+ga.getName());
-		scoreShow(ga);
+		System.out.println(">>>Run game: "+game.getName());
+		scoreShow(game);
 
 		try {
-			if(ga.run() == 0)
+			if(game.run() == 0)
 			{
 				// TODO add my score
-				scoreShow(ga);
+				scoreShow(game);
 				//TODO ad line show my score
 				
 				
 				if(this.readYN("Do you want add comment"))
-					commentAdder(ga);
+					commentAdder(game);
 				else
 					if(this.readYN("Do you want show comments"))
-						commentsShow(ga);
+						commentsShow(game);
 				
 				// TODO: rating 
 

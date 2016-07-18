@@ -23,13 +23,15 @@ public class ConsoleRun {
 //				ScoreService score =  new sk.tsystems.gamestudio.services.jdbc.ScoreSvc(user);
 			)
 		{
-			GameEntity ga = new GameEntity(0, "Minesweeper");
-			ga.setRunnable(sk.tsystems.gamestudio.game.minesweeper.Minesweeper.class);
-			game.addGame(ga);
-			
-			game.addGame(new GameEntity(0, "Kamene"));
-			game.addGame(new GameEntity(0, "Uhadni cislo"));
-
+			if(game.listGames().isEmpty()) // we need to create games 
+			{
+				GameEntity ga = new GameEntity(0, "Minesweeper");
+				ga.setRunnable(sk.tsystems.gamestudio.game.minesweeper.Minesweeper.class);
+				game.addGame(ga);
+				
+				game.addGame(new GameEntity(0, "Kamene"));
+				game.addGame(new GameEntity(0, "Uhadni cislo"));
+			}
 			
 			
 			ConsoleUI ui = new ConsoleUI(game, user, comme, score, rating);

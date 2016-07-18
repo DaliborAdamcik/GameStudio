@@ -17,15 +17,16 @@ public class UserSvc extends JpaConnector implements UserService {
 	@Override
 	public boolean auth(String name) {
 		UserEntity usr = getUser(name);
-		if(usr==null)
+		if(usr==null) // TODO this time, we aDD any user
+		{
 			usr = new UserEntity(0,name);
-		
+			EntityManager em = getEntityManager();
+			beginTransaction();
+			em.persist(usr);
+			commitTransaction();
+		}
 		current = usr;
 		
-		EntityManager em = getEntityManager();
-		beginTransaction();
-		em.persist(usr);
-		commitTransaction();
 		return true; // TODO
 	}
 
@@ -34,17 +35,12 @@ public class UserSvc extends JpaConnector implements UserService {
 		try
 		{
 			EntityManager em = getEntityManager();
-			beginTransaction();
 
 			Query que = em.createQuery("SELECT u FROM UserEntity u WHERE u.id = :id").setParameter("id", id);
 			return (UserEntity) que.getSingleResult();
 		}
 		catch (NoResultException e) {
 			return null;
-		}
-		finally
-		{
-			commitTransaction();
 		}
 	}
 
@@ -53,17 +49,11 @@ public class UserSvc extends JpaConnector implements UserService {
 		try
 		{
 			EntityManager em = getEntityManager();
-			beginTransaction();
-			
 			Query que = em.createQuery("SELECT u FROM UserEntity u WHERE u.name = :name").setParameter("name", name);
 			return (UserEntity) que.getSingleResult();
 		}
 		catch (NoResultException e) {
 			return null;
-		}
-		finally
-		{
-			commitTransaction();
 		}
 	}
 
@@ -73,11 +63,12 @@ public class UserSvc extends JpaConnector implements UserService {
 	}
 
 	@Override
-	public UserEntity addUser(String name) {
+	public UserEntity addUser(String name) { // TODO Temporay function
 		UserEntity usr = getUser(name);
-		if(usr==null)
-			usr = new UserEntity(0,name);
-		
+		if(usr!=null)
+			return usr;
+
+		usr = new UserEntity(0,name);
 		EntityManager em = getEntityManager();
 		beginTransaction();
 		em.persist(usr);

@@ -26,6 +26,11 @@ public class CommentEntity {
 	@OneToOne
 	@JoinColumn(name="USRID")
 	private UserEntity user;
+	
+	public CommentEntity() // constructor for JPA
+	{
+		this(null, null, null, 0, null);
+	}
 
 	public CommentEntity(GameEntity game, UserEntity user, String comment, int id, Date date) {
 		super();

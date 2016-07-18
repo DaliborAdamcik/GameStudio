@@ -27,6 +27,9 @@ public class RatingEntity {
 	@JoinColumn(name="USRID")
 	private UserEntity user;
 	
+	public RatingEntity() { // constructor for JPA
+		this(null, null, 0, 0);
+	}
 	public RatingEntity(GameEntity game, UserEntity user, int rating, int id) {
 		super();
 		this.game = game;

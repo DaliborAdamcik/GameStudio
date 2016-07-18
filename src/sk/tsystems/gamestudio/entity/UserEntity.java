@@ -13,11 +13,17 @@ public class UserEntity {
 	@Column(name = "USRNAME")	
 	private String name;
 	
+	public UserEntity() // constructor for JPA
+	{
+		this(0, "");
+	}
+
 	public UserEntity(int id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
+	
 
 	public int getID() {
 		return id;
