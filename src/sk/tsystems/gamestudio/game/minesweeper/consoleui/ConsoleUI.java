@@ -23,7 +23,7 @@ public class ConsoleUI extends sk.tsystems.gamestudio.consoleui.ConsoleInput imp
 	 * @see minesweeper.consoleui.UserInterface#newGameStarted(minesweeper.core.Field)
 	 */
     @Override
-	public boolean newGameStarted(Field field) {
+	public void newGameStarted(Field field) {
         this.field = field;
        
         do {
@@ -31,29 +31,19 @@ public class ConsoleUI extends sk.tsystems.gamestudio.consoleui.ConsoleInput imp
             processInput();
         } while(field.getState().compareTo(GameState.PLAYING)==0 && playing);
         
+        if(!playing)
+        	return;
+
         update(); // show "solved/failed" mine-field
        
-        System.out.println(field.getState());
-
-        return true;
-/*        
         switch(field.getState())
         {
 			case FAILED: System.out.println("Auch, You found a MINE! (G A M E   O V E R)");	break; 
 			case SOLVED: 
-				System.out.println("You W O N :-)\nPlease, enter your name for score table: "); 
-		        int score = field.getRowCount()*field.getColumnCount();
-		        score = Minesweeper.getInstance().getPlayingSeconds()*10 / score;
-
-		        String name = readLine().trim();
-				if(name.length()>0)
-				{
-					Minesweeper.getInstance().getBestTimes().addPlayerTime(name, score);
-				}
+				System.out.println("You W O N :-)\r\n"); 
 				break;
 			default: break;
         }
-        System.out.println(Minesweeper.getInstance().getBestTimes().toString()); */
     }
     
     /* (non-Javadoc)

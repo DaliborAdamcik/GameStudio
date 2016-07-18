@@ -1,7 +1,5 @@
 package sk.tsystems.gamestudio.services.jdbc;
 
-import java.util.List;
-
 import sk.tsystems.gamestudio.entity.GameEntity;
 import sk.tsystems.gamestudio.entity.RatingEntity;
 import sk.tsystems.gamestudio.entity.UserEntity;
@@ -31,11 +29,4 @@ public class RatingSvc extends jdbcConnector implements RatingService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	@Override
-	public List<RatingEntity> ratings() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

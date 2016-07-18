@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import sk.tsystems.gamestudio.consoleui.GameUiRunner.RunTarget;
 import sk.tsystems.gamestudio.entity.CommentEntity;
 import sk.tsystems.gamestudio.entity.GameEntity;
 import sk.tsystems.gamestudio.entity.RatingEntity;
@@ -116,7 +117,7 @@ public class ConsoleUI extends ConsoleInput {
 	
 	private Object getMenuOption(int maxmenu)
 	{
-		do
+		do // TODO filter there?
 		{
 			System.out.print("> Enter option: ");
 			String option = this.readLine().trim().toLowerCase();
@@ -156,24 +157,26 @@ public class ConsoleUI extends ConsoleInput {
 		scoreShow(game);
 
 		try {
-			if(game.run() == 0)
+			int retScore = game.run(RunTarget.UI_CONSOLE); // try to run game, returns: 0 = exit, -1 fail, -2 and lower = undefined, 0+ score 
+			
+			if(retScore > 0)
 			{
-				// TODO add my score
-				scoreShow(game);
-				//TODO ad line show my score
-				
-				
-				if(this.readYN("Do you want add comment"))
-					commentAdder(game);
-				else
-					if(this.readYN("Do you want show comments"))
-						commentsShow(game);
-				
-				// TODO: rating 
-
-				
-				
+				ScoreEntity myScore = new ScoreEntity(game, users.me(), retScore);
+				scores.addScore(myScore);
+				scoreShow(game, myScore);
 			}
+			else
+			scoreShow(game);
+			
+			if(this.readYN("Do you want add comment"))
+				commentAdder(game);
+			else
+				if(this.readYN("Do you want show comments"))
+					commentsShow(game);
+			
+			if(this.readYN("Do you want (re)rate this game"))
+				ratingAdd(game);
+				
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -181,9 +184,15 @@ public class ConsoleUI extends ConsoleInput {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Cant run game: "+e.getMessage());
+			// e.printStackTrace();
 		}
+	}
+	
+	private void ratingAdd(GameEntity game)
+	{
+		int rating = readInt("Enter rating ", 1, 5);
+		ratings.addRating(new RatingEntity(game, users.me(), rating));
 	}
 	
 	private void commentAdder(GameEntity game)
@@ -199,24 +208,34 @@ public class ConsoleUI extends ConsoleInput {
 	
 	private void commentsShow(GameEntity game)
 	{
-		List<CommentEntity> comml = comments.commentsFor(game);
-		for (CommentEntity commi :comml) {
+		for (CommentEntity commi : comments.commentsFor(game)) {
 			System.out.printf("%d: %s %s %s\r\n", commi.getID(), commi.getUser().getName(), 
 					commi.getDate().toString(), commi.getComment());
 		}
 	}
 	
+	private void printScore(ScoreEntity score, int idx)
+	{
+		System.out.printf("%2d. %d %s %s\r\n", idx, score.getScore(), score.getUser().getName(),  
+				score.getDate().toString());
+	}
+	
+	private void scoreShow(GameEntity game, ScoreEntity myScore)
+	{
+		scoreShow(game);
+		System.out.print("\n\tYour score: ");
+		printScore(myScore, 0);
+	}
+	
 	private void scoreShow(GameEntity game)
 	{
-		System.out.printf("** TOP 10 Scores for -> %s <- ***\r\n", game.getName());
-		
-		List<ScoreEntity> scrl = scores.topScores(game);
+		System.out.printf("** TOP Scores for -> %s <- ***\r\n", game.getName());
 		int cnt = 1;
 		
-		for (ScoreEntity scri: scrl) {
-			System.out.printf("%2d. %d %s %s\r\n", cnt++, scri.getScore(), scri.getUser().getName(),  
-					scri.getDate().toString());
+		for (ScoreEntity score: scores.topScores(game)) {
+			printScore(score, cnt++);
 		}
+		
 	}
 	
 

@@ -1,7 +1,7 @@
 package sk.tsystems.gamestudio.entity;
 import javax.persistence.*;
 
-import sk.tsystems.gamestudio.consoleui.ConsoleUiRun;
+import sk.tsystems.gamestudio.consoleui.GameUiRunner;
 
 @Entity
 @Table(name="JPA_GAMES")
@@ -48,23 +48,30 @@ public class GameEntity {
 		this.runnable = runnable;
 	}
 	
-	public int run() throws InstantiationException, IllegalAccessException, ClassNotFoundException
+	public int run(GameUiRunner.RunTarget target) throws InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
-		if (runnable == null)
+		if (!checkRunnable(this.runnable))
+			throw new ClassNotFoundException("Try to run class which not implement "+GameUiRunner.class.getSimpleName());
+
+		GameUiRunner instance = (GameUiRunner) this.runnable.newInstance();
+
+		switch (instance.runCsl(target)) // run selected 
 		{
-			throw new ClassNotFoundException();
+			case RS_EXIT:
+				return 0;
+			case RS_FAIL:
+				return -1;
+			case RS_SUCCES:
+				return instance.getScore(); 
+			default:
+				return -2;
 		}
-		ConsoleUiRun instance = (ConsoleUiRun) this.runnable.newInstance();
-		return instance.runCsl();
 	}
 	
 	private boolean checkRunnable(Class<?> runnable)
 	{
-		return true; // TODO check class contain runnable method
+		return runnable != null && GameUiRunner.class.isAssignableFrom(runnable);// TODO okay for now
 	}
-	
-	
-	
 }
 
 /*			Class<?> clz = Class.forName(ga.className());

@@ -34,9 +34,7 @@ public class UserSvc extends JpaConnector implements UserService {
 	public UserEntity getUser(int id) {
 		try
 		{
-			EntityManager em = getEntityManager();
-
-			Query que = em.createQuery("SELECT u FROM UserEntity u WHERE u.id = :id").setParameter("id", id);
+			Query que = getEntityManager().createQuery("SELECT u FROM UserEntity u WHERE u.id = :id").setParameter("id", id);
 			return (UserEntity) que.getSingleResult();
 		}
 		catch (NoResultException e) {
@@ -48,8 +46,7 @@ public class UserSvc extends JpaConnector implements UserService {
 	public UserEntity getUser(String name) {
 		try
 		{
-			EntityManager em = getEntityManager();
-			Query que = em.createQuery("SELECT u FROM UserEntity u WHERE u.name = :name").setParameter("name", name);
+			Query que = getEntityManager().createQuery("SELECT u FROM UserEntity u WHERE u.name = :name").setParameter("name", name);
 			return (UserEntity) que.getSingleResult();
 		}
 		catch (NoResultException e) {
@@ -63,7 +60,7 @@ public class UserSvc extends JpaConnector implements UserService {
 	}
 
 	@Override
-	public UserEntity addUser(String name) { // TODO Temporay function
+	public UserEntity addUser(String name) { // TODO Temporary function
 		UserEntity usr = getUser(name);
 		if(usr!=null)
 			return usr;

@@ -8,7 +8,7 @@ public interface UserInterface {
 	 * Starts the game.
 	 * @param field field of mines and clues
 	 */
-	boolean newGameStarted(Field field);
+	void newGameStarted(Field field);
 
 	/**
 	 * Updates user interface - prints the field.

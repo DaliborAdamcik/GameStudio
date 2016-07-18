@@ -1,7 +1,5 @@
 package sk.tsystems.gamestudio.services.jpa;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -40,17 +38,11 @@ public class RatingSvc extends JpaConnector implements RatingService {
 	public RatingEntity myRating(GameEntity game, UserEntity user) {
 		try
 		{
-			EntityManager em = getEntityManager();
-			beginTransaction();
-			Query que = em.createQuery("SELECT r FROM RatingEntity r WHERE r.game = :game  AND r.user = :user ").setParameter("game", game).setParameter("user", user);
+			Query que = getEntityManager().createQuery("SELECT r FROM RatingEntity r WHERE r.game = :game  AND r.user = :user ").setParameter("game", game).setParameter("user", user);
 			return (RatingEntity) que.getSingleResult();
 		}
 		catch (NoResultException e) {
 			return null;
-		}
-		finally
-		{
-			commitTransaction();
 		}
 	}
 
@@ -69,24 +61,4 @@ public class RatingSvc extends JpaConnector implements RatingService {
 			return 0;
 		}
 	}
-
-	@Override
-	public List<RatingEntity> ratings() {
-		/*try
-		{
-			EntityManager em = getEntityManager();
-			beginTransaction();
-			Query que = em.createQuery("SELECT s FROM ScoreEntity s WHERE s.game = :game ORDER BY s.score").setParameter("game", game).setMaxResults(10);
-			return que.getResultList();
-		}
-		catch (NoResultException e) {
-			return new ArrayList<ScoreEntity>();
-		}
-		finally
-		{
-			commitTransaction();
-		}*/
-		return null;
-	}
-
 }

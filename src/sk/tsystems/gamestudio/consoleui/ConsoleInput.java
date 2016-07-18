@@ -7,17 +7,12 @@ import java.io.InputStreamReader;
 public abstract class ConsoleInput {
     private static BufferedReader input = null;
     
-
-    
-    
     public ConsoleInput() {
 		super();
 		
 		if(input==null)
 		input = new BufferedReader(new InputStreamReader(System.in));
 	}
-
-
 
 	/**
      * Reads line of text from the reader (cosnole).
@@ -42,5 +37,26 @@ public abstract class ConsoleInput {
     	{
     		return false;
     	}
+    }
+    
+    public int readInt(String message, int min, int max)
+    {
+    	if(min>max)
+    		throw new NumberFormatException("bad range min"+min+" max"+max);
+    	
+    	do 
+    	{
+    		System.out.printf("%s (%d <->%d):", message, min, max);
+    		try
+    		{
+    			int i = Integer.parseInt(readLine().trim());
+    			
+    			if(i>=min && i<= max)
+    				return i;
+    		}
+    		catch(NumberFormatException e)
+    		{}
+    	}
+    	while(true);
     }
 }
