@@ -19,7 +19,7 @@ public class GameSvc /*extends jdbcConnector*/ implements GameService {
 
 	@Override
 	public GameEntity getGame(int id) { 
-		if(id < 1 || id > games.size())
+		if(id < 0 || id > games.size())
 			return null;
 
 		return games.get(id-1);

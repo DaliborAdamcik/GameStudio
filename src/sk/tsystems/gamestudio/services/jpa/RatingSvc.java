@@ -25,7 +25,7 @@ public class RatingSvc extends JpaConnector implements RatingService {
 		else
 		{
 			rat = rating;
-			rat.setID(0); // Autoset ID of rating for JPA
+			//TODO OLD rat.setID(0); // Autoset ID of rating for JPA
 		}
 		
 		EntityManager em = getEntityManager();

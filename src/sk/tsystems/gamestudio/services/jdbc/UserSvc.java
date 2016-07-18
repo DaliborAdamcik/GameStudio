@@ -9,6 +9,7 @@ import sk.tsystems.gamestudio.services.UserService;
 public class UserSvc extends jdbcConnector implements UserService {
 	private final String SELECT_QI = "SELECT USRID, UNAME FROM USRS WHERE USRID = ?";
 	private final String SELECT_QN = "SELECT USRID, UNAME FROM USRS WHERE UNAME = ?";
+	private final String INSERT_Q = "INSERT INTO USRS (UNAME) VALUES (?)";
 	
 	private UserEntity myAcc = null;
 	
@@ -56,21 +57,32 @@ public class UserSvc extends jdbcConnector implements UserService {
 	}
 
 	@Override
-	public boolean auth(String name) { // as simple as can be
+	public boolean auth(String name) { //TODO as simple as can be
 		UserEntity usr = getUser(name);
 		
-		if(usr==null) // vlozit do databazy noveho
-			return false;
+		if(usr==null) 
+			usr = addUser(name);
 		
 		myAcc = usr;
-
 		return true;
 	}
 
 	@Override
 	public UserEntity addUser(String name) {
-		// TODO Auto-generated method stub
-		return null;
+        try(PreparedStatement stmt = this.conn().prepareStatement(INSERT_Q))
+        {
+	        stmt.setString(1, name);
+
+	        if(stmt.executeUpdate()>0)
+	        	return getUser(name);
+        } catch (SQLException e) {
+        	if(e instanceof java.sql.SQLIntegrityConstraintViolationException)
+	        	return getUser(name);
+	        else
+			e.printStackTrace();
+		}
+        
+        return null;
 	}
 
 

@@ -1,10 +1,10 @@
 package sk.ness.jpa;
 
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
+//@Entity TODO
 public class Student {
 
 	@Id

@@ -3,7 +3,7 @@ package sk.tsystems.gamestudio.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name="JPA_USERS")
+@Table(name="JPA_USER")
 public class UserEntity {
 	@Id
 	@Column(name = "USRID")

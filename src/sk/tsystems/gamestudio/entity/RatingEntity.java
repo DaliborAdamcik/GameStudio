@@ -42,13 +42,14 @@ public class RatingEntity {
 		this(game, user, rating, 0);
 	}
 
+	/*
 	public int getID() {
 		return id;
 	}
 
 	public void setID(int id) {
 		this.id = id;
-	}
+	}*/
 
 	public void setRating(int rating) {
 		this.rating = rating;

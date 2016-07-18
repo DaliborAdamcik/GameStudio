@@ -4,7 +4,7 @@ import javax.persistence.*;
 import sk.tsystems.gamestudio.consoleui.GameUiRunner;
 
 @Entity
-@Table(name="JPA_GAMES")
+@Table(name="JPA_GAME")
 public class GameEntity {
 	@Id
 	@Column(name = "GAMEID")
