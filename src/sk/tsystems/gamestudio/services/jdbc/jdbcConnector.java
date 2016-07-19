@@ -2,7 +2,7 @@ package sk.tsystems.gamestudio.services.jdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-abstract class jdbcConnector implements AutoCloseable{
+public abstract class jdbcConnector implements AutoCloseable{
 	// configuration for database connection  
 	private final String driverCls = "oracle.jdbc.OracleDriver";
 	private final String dbURL_primary = "jdbc:oracle:thin:@localhost:1521:xe";
@@ -11,7 +11,7 @@ abstract class jdbcConnector implements AutoCloseable{
 	private final String passw = "gamecenter";
 	private static Connection dbCon = null; // an connection to database  
 	
-	jdbcConnector() {
+	public jdbcConnector() {
 		super();
 		if(!verifyConn())
 			establishConn();
@@ -66,7 +66,7 @@ abstract class jdbcConnector implements AutoCloseable{
 		return false;
 	}
 	
-	Connection conn()
+	public Connection conn()
 	{
 		if( !verifyConn() )
 			establishConn();
