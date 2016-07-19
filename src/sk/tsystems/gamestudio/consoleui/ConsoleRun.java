@@ -31,9 +31,14 @@ public class ConsoleRun {
 				game.addGame(ga);
 				
 				game.addGame(new GameEntity(0, "Kamene"));
-				game.addGame(new GameEntity(0, "Uhadni cislo"));
+				
+
+				ga = new GameEntity(0, "Guess the number");
+				ga.setRunnable(sk.tsystems.gamestudio.game.guessnumber.ui.GuesNumRun.class);
+				game.addGame(ga);
+
+				
 			}
-			
 			
 			ConsoleUI ui = new ConsoleUI(game, user, comme, score, rating);
 			ui.run();

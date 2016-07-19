@@ -5,8 +5,8 @@ import java.sql.DriverManager;
 abstract class jdbcConnector implements AutoCloseable{
 	// configuration for database connection  
 	private final String driverCls = "oracle.jdbc.OracleDriver";
-//	private final String dbURL = "jdbc:oracle:thin:@localhost:1521:xe";
-	private final String dbURL = "jdbc:oracle:thin:@oracledb.dalibor.sk:1521:xe";
+	private final String dbURL_primary = "jdbc:oracle:thin:@localhost:1521:xe";
+	private final String dbURL_secondary = "jdbc:oracle:thin:@oracledb.dalibor.sk:1521:xe";
 	private final String user = "gamecenter";
 	private final String passw = "gamecenter";
 	private static Connection dbCon = null; // an connection to database  
@@ -23,10 +23,18 @@ abstract class jdbcConnector implements AutoCloseable{
         if(dbCon!= null)
         	tryCloseDBConn();
 
+        // TODO propertyfile
         try
         {
             Class.forName(driverCls);
-        	dbCon = DriverManager.getConnection(dbURL, user, passw);
+            try
+            {
+            	dbCon = DriverManager.getConnection(dbURL_primary, user, passw);
+            }
+            catch(Exception e)
+            {
+            	dbCon = DriverManager.getConnection(dbURL_secondary, user, passw);
+            }
         }
         catch(Exception e)
         {
