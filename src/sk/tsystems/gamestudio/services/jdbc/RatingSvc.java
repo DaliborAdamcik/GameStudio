@@ -34,6 +34,7 @@ public class RatingSvc extends jdbcConnector implements RatingService {
 	        stmt.setInt(1, users.me().getID()); // prevent addiding as another user
 	        stmt.setInt(2, rating.getGame().getID());
 	        stmt.setInt(3, rating.getRating());
+	        stmt.executeUpdate();
         } catch (SQLException e) {
 /*        	if(e instanceof java.sql.SQLIntegrityConstraintViolationException)
         	throw new DuplicationException("Person "+person.getName()+" ("+person.getPhoneNumber()+") already exists.");*/	

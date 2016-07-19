@@ -72,6 +72,10 @@ public class GameEntity {
 	{
 		return runnable != null && GameUiRunner.class.isAssignableFrom(runnable);// TODO okay for now
 	}
+
+	public void setID(int id) {
+		this.id = id;
+	}
 }
 
 /*			Class<?> clz = Class.forName(ga.className());

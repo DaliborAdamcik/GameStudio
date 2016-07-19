@@ -9,7 +9,7 @@ import sk.tsystems.gamestudio.services.UserService;
 public class UserSvc extends jdbcConnector implements UserService {
 	private final String SELECT_QI = "SELECT USRID, UNAME FROM USRS WHERE USRID = ?";
 	private final String SELECT_QN = "SELECT USRID, UNAME FROM USRS WHERE UNAME = ?";
-	private final String INSERT_Q = "INSERT INTO USRS (UNAME) VALUES (?)";
+	private final String INSERT_Q = "INSERT INTO USRS (UNAME, USRID, PWD, EMAIL) VALUES (?, USRID_SEQ.nextval, '1234', 'newusr'||USRID_SEQ.nextval||'@gamestudio' )";
 	
 	private UserEntity myAcc = null;
 	
@@ -68,7 +68,7 @@ public class UserSvc extends jdbcConnector implements UserService {
 	}
 
 	@Override
-	public UserEntity addUser(String name) {
+	public UserEntity addUser(String name) { // TODO temp function
         try(PreparedStatement stmt = this.conn().prepareStatement(INSERT_Q))
         {
 	        stmt.setString(1, name);
@@ -76,10 +76,7 @@ public class UserSvc extends jdbcConnector implements UserService {
 	        if(stmt.executeUpdate()>0)
 	        	return getUser(name);
         } catch (SQLException e) {
-        	if(e instanceof java.sql.SQLIntegrityConstraintViolationException)
-	        	return getUser(name);
-	        else
-			e.printStackTrace();
+        	e.printStackTrace();
 		}
         
         return null;
