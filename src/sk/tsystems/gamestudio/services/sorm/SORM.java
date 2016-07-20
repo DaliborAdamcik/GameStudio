@@ -1,6 +1,7 @@
 package sk.tsystems.gamestudio.services.sorm;
 
 /* sorm by jaro*/
+/* modified by dalik */
 
 import java.io.File;
 import java.io.IOException;

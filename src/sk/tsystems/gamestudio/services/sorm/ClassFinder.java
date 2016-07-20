@@ -1,4 +1,5 @@
 package sk.tsystems.gamestudio.services.sorm;
+//http://stackoverflow.com/questions/15519626/how-to-get-all-classes-names-in-a-package
 
 import java.io.File;
 import java.net.URL;
@@ -21,7 +22,11 @@ public class ClassFinder {
         if (scannedUrl == null) {
             throw new IllegalArgumentException(String.format(BAD_PACKAGE_ERROR, scannedPath, scannedPackage));
         }
+        System.out.println(scannedUrl.getFile());
+        
         File scannedDir = new File(scannedUrl.getFile());
+        if(!scannedDir.exists())
+        	throw new RuntimeException("dir '"+scannedDir.getPath()+"' not exists.");
         List<Class<?>> classes = new ArrayList<Class<?>>();
         for (File file : scannedDir.listFiles()) {
             classes.addAll(find(file, scannedPackage));

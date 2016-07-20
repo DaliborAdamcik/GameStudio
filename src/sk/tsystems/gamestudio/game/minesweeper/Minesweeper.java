@@ -52,7 +52,7 @@ public class Minesweeper implements GameUiRunner {
         int score = field.getRowCount()*field.getColumnCount();
         score = Minesweeper.getInstance().getPlayingSeconds()*10 / score;
 
-		return getPlayingSeconds();
+		return score;
 	}
 	
 	

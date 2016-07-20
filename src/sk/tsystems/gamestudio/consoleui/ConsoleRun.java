@@ -11,8 +11,8 @@ public class ConsoleRun {
 
 	public static void main(String[] args) {
 
-		sk.tsystems.gamestudio.services.sorm.SORM srm = 
-		new sk.tsystems.gamestudio.services.sorm.SORM();
+/*		sk.tsystems.gamestudio.services.sorm.SORM srm = 
+		new sk.tsystems.gamestudio.services.sorm.SORM();*/
 		
 		
 		
@@ -36,8 +36,9 @@ public class ConsoleRun {
 				ga.setRunnable(sk.tsystems.gamestudio.game.minesweeper.Minesweeper.class);
 				game.addGame(ga);
 				
-				game.addGame(new GameEntity(0, "Kamene"));
-				
+				ga = new GameEntity(0, "Stones");
+				ga.setRunnable(sk.tsystems.gamestudio.game.stones.ui.StonesUI.class);
+				game.addGame(ga);
 
 				ga = new GameEntity(0, "Guess the number");
 				ga.setRunnable(sk.tsystems.gamestudio.game.guessnumber.ui.GuesNumRun.class);
@@ -45,6 +46,8 @@ public class ConsoleRun {
 
 				
 			}
+			
+			System.out.println(sk.tsystems.gamestudio.game.stones.ui.StonesUI.class.getName());
 			
 			ConsoleUI ui = new ConsoleUI(game, user, comme, score, rating);
 			ui.run();
