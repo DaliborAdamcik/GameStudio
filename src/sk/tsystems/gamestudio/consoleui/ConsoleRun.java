@@ -11,8 +11,11 @@ public class ConsoleRun {
 
 	public static void main(String[] args) {
 
-/*		sk.tsystems.gamestudio.services.sorm.SORM srm = 
-		new sk.tsystems.gamestudio.services.sorm.SORM();*/
+		sk.tsystems.gamestudio.services.sorm.SORM srm = 
+		new sk.tsystems.gamestudio.services.sorm.SORM();
+		
+		System.exit(0);
+		
 		
 		
 		
