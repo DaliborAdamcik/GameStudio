@@ -3,8 +3,6 @@ package sk.tsystems.gamestudio.services.sorm;
 /* sorm by jaro*/
 /* modified by dalik */
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -14,34 +12,50 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.LinkedList;
 import java.util.List;
-import java.net.URL;
-import java.net.URLDecoder;
 
 public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 	public static final String URL = "jdbc:oracle:thin:@//localhost:1521/XE";
 	public static final String USER = "register";
 	public static final String PASSWORD = "p4ssw0rd";
 	
+	private List<Class<?>> sorms;  
 	public SORM()
 	{
 		super();
+		List<Class<?>> sorms =  new ArrayList<>(); 
+		srchSORManot();
+		
+		for(Class<?> c : sorms)
+			System.out.println(c.getName());
+		
+		System.exit(0);
+	}
+	
+	void srchSORManot()
+	{
+		// find all classes in all packages  
 		try {
-			
-			ClassFinder fi = new ClassFinder();
-			for(Class c : fi.find("sk.tsystems.gamestudio.entity"))
-			{
-				System.out.println(c.getName());
-			}
-			
+			List<Class<?>> classes = ClassFinder.classesInSubPackage("sk.tsystems.gamestudio");
+			for(Class<?> c : classes)
+				processClass(c);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.exit(0);
 	}
+	
+	private void processClass(Class<?> cls)
+	{
+		if(cls.getAnnotation(SORMTable.class)!= null)
+		{
+			sorms.add(cls);
+		}
+	}
+	
+	
+	
 	
 /*	// http://stackoverflow.com/questions/520328/can-you-find-all-classes-in-a-package-using-reflection	
 	private static Class[] getClasses(String packageName)
@@ -116,7 +130,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 			first = false;
 			sb.append(getColumnName(field) + " " + getSQLType(field.getType()));
 
-			if (field.isAnnotationPresent(Id.class)) {
+			if (field.isAnnotationPresent(SORMid.class)) {
 				sb.append(" PRIMARY KEY");
 			}
 		}
@@ -175,7 +189,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 
 		boolean first = true;
 		for (Field field : clazz.getDeclaredFields()) {
-			if (!field.isAnnotationPresent(Id.class)) {
+			if (!field.isAnnotationPresent(SORMid.class)) {
 				if (!first) {
 					sb.append(", ");
 				}
@@ -190,7 +204,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 
 		first = true;
 		for (Field field : clazz.getDeclaredFields()) {
-			if (field.isAnnotationPresent(Id.class)) {
+			if (field.isAnnotationPresent(SORMid.class)) {
 				if (!first) {
 					sb.append(" AND ");
 				}
@@ -209,7 +223,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 
 		boolean first = true;
 		for (Field field : clazz.getDeclaredFields()) {
-			if (field.isAnnotationPresent(Id.class)) {
+			if (field.isAnnotationPresent(SORMid.class)) {
 				if (!first) {
 					sb.append(" AND ");
 				}
@@ -279,7 +293,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 
 			int index = 1;
 			for (Field field : clazz.getDeclaredFields()) {
-				if (!field.isAnnotationPresent(Id.class)) {
+				if (!field.isAnnotationPresent(SORMid.class)) {
 					field.setAccessible(true);
 					Object value = field.get(object);
 					stmt.setObject(index, value);
@@ -288,7 +302,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 			}
 
 			for (Field field : clazz.getDeclaredFields()) {
-				if (field.isAnnotationPresent(Id.class)) {
+				if (field.isAnnotationPresent(SORMid.class)) {
 					field.setAccessible(true);
 					Object value = field.get(object);
 					stmt.setObject(index, value);
@@ -310,7 +324,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 
 			int index = 1;
 			for (Field field : clazz.getDeclaredFields()) {
-				if (field.isAnnotationPresent(Id.class)) {
+				if (field.isAnnotationPresent(SORMid.class)) {
 					field.setAccessible(true);
 					Object value = field.get(object);
 					stmt.setObject(index, value);
@@ -336,7 +350,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 	}
 
 	private String getTableName(Class<?> clazz) {
-		Table table = clazz.getAnnotation(Table.class);
+		SORMTable table = clazz.getAnnotation(SORMTable.class);
 		if (table != null) {
 			return table.value();
 		}
@@ -344,7 +358,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 	}
 
 	private String getColumnName(Field field) {
-		Column column = field.getAnnotation(Column.class);
+		SORMColumn column = field.getAnnotation(SORMColumn.class);
 		if (column != null) {
 			return column.value();
 		}

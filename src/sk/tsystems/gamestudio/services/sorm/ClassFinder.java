@@ -1,12 +1,15 @@
 package sk.tsystems.gamestudio.services.sorm;
 //http://stackoverflow.com/questions/15519626/how-to-get-all-classes-names-in-a-package
-
+// modified
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ClassFinder {
 
@@ -29,7 +32,6 @@ public class ClassFinder {
         	name = URLDecoder.decode(scannedUrl.getFile(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 		}
-		System.out.println(name);
         
         File scannedDir = new File(name);
         if(!scannedDir.exists())
@@ -57,6 +59,29 @@ public class ClassFinder {
             }
         }
         return classes;
+    }
+    
+    // http://stackoverflow.com/questions/13944633/java-reflection-get-list-of-packages
+    private static List<String> findPackageNamesStartingWith(String prefix) {
+        List<String> result = new ArrayList<>();
+        for(Package p : Package.getPackages()) {
+            if (p.getName().startsWith(prefix)) {
+               result.add(p.getName());
+            }
+        }
+        return result;
+    }
+    
+    // my own
+    public static List<Class<?>> classesInSubPackage(String packagename)
+    {
+        List<Class<?>> classes = new ArrayList<Class<?>>();
+        
+        for(String pname: findPackageNamesStartingWith(packagename))
+        {
+        	classes.addAll(find(packagename));
+        }
+    	return classes;
     }
 
 }
