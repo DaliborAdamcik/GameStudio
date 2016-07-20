@@ -23,7 +23,7 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 	public SORM()
 	{
 		super();
-		List<Class<?>> sorms =  new ArrayList<>(); 
+		sorms =  new ArrayList<>(); 
 		srchSORManot();
 		
 		for(Class<?> c : sorms)
@@ -38,7 +38,10 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 		try {
 			List<Class<?>> classes = ClassFinder.classesInSubPackage("sk.tsystems.gamestudio");
 			for(Class<?> c : classes)
-				processClass(c);
+			{
+				System.out.println(c.getName()+": "+ processClass(c));
+				
+			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -46,12 +49,14 @@ public class SORM extends sk.tsystems.gamestudio.services.jdbc.jdbcConnector {
 		}
 	}
 	
-	private void processClass(Class<?> cls)
+	private boolean processClass(Class<?> cls)
 	{
 		if(cls.getAnnotation(SORMTable.class)!= null)
 		{
 			sorms.add(cls);
+			return true;
 		}
+		return false;
 	}
 	
 	
