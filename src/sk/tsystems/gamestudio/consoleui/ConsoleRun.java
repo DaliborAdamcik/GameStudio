@@ -11,17 +11,17 @@ public class ConsoleRun {
 
 	public static void main(String[] args) {
 		try(
-				GameService game = new sk.tsystems.gamestudio.services.jpa.GameSvc();
+				/*GameService game = new sk.tsystems.gamestudio.services.jpa.GameSvc();
 				UserService user = new sk.tsystems.gamestudio.services.jpa.UserSvc();
 				CommentService comme = new sk.tsystems.gamestudio.services.jpa.CommentSvc();
 				ScoreService score =  new sk.tsystems.gamestudio.services.jpa.ScoreSvc();
 				RatingService rating = new sk.tsystems.gamestudio.services.jpa.RatingSvc();
-								
-				/*GameService game = new sk.tsystems.gamestudio.services.jdbc.GameSvc();
+					*/			
+				GameService game = new sk.tsystems.gamestudio.services.jdbc.GameSvc();
 				UserService user = new sk.tsystems.gamestudio.services.jdbc.UserSvc();
 				CommentService comme = new sk.tsystems.gamestudio.services.jdbc.CommentSvc(user, game);
 				ScoreService score =  new sk.tsystems.gamestudio.services.jdbc.ScoreSvc(user);
-				RatingService rating = new sk.tsystems.gamestudio.services.jdbc.RatingSvc(user);*/
+				RatingService rating = new sk.tsystems.gamestudio.services.jdbc.RatingSvc(user);
 			)
 		{
 			if(game.listGames().isEmpty()) // we need to create games 

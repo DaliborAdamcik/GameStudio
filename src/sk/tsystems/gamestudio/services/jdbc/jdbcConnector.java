@@ -1,45 +1,87 @@
 package sk.tsystems.gamestudio.services.jdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.io.InputStream;
+import java.util.Properties;
+
+
 
 public abstract class jdbcConnector implements AutoCloseable{
 	// configuration for database connection  
-	private final String driverCls = "oracle.jdbc.OracleDriver";
-	private final String dbURL_primary = "jdbc:oracle:thin:@localhost:1521:xe";
-	private final String dbURL_secondary = "jdbc:oracle:thin:@oracledb.dalibor.sk:1521:xe";
-	private final String user = "gamecenter";
-	private final String passw = "gamecenter";
+	private static String host = null;
+	private static String user = null;
+	private static String password = null;
+	private static int timeout = 10; // 10 seconds default timeout for verify delay of connection
+	private static boolean configurationLoaded = false;
 	private static Connection dbCon = null; // an connection to database  
+	
 	
 	public jdbcConnector() {
 		super();
+		
+		if(!configurationLoaded)
+			loadConfiguration();
+		
 		if(!verifyConn())
 			establishConn();
 	}
 	
+	private void loadConfiguration()
+	{
+		Properties prop = new Properties();
+
+		try(InputStream input = 
+				this.getClass().getClassLoader().getResourceAsStream("META-INF/svcjdbc.conf") ) {
+			prop.load(input);
+			
+			host = prop.getProperty("host");
+			user = prop.getProperty("user");
+			password = prop.getProperty("password");
+			
+			if(host==null || user==null || password==null)
+				throw new NullPointerException("Missconfigured required property: host, user or password");
+
+
+			String tmout = prop.getProperty("timeout"); // timeout is optional configuration flag
+			if(tmout!= null)
+			try
+			{
+				timeout = Integer.parseInt(tmout);
+			}
+			catch (NumberFormatException e) {}
+			
+			if(timeout<10)
+				throw new NumberFormatException("We dont support timeout less than 10 seconds. Please, reconfigure.");
+				
+			configurationLoaded = true;
+		} 
+		catch (Exception e) {
+			throw new RuntimeException("JDBC svc connector can't read conf file", e);
+		}
+	}
 	
 	private void establishConn()
 	{
         if(dbCon!= null)
         	tryCloseDBConn();
 
-        // TODO propertyfile
         try
         {
-            Class.forName(driverCls);
+            Class.forName("oracle.jdbc.OracleDriver");
             try
             {
-            	dbCon = DriverManager.getConnection(dbURL_primary, user, passw);
+            	dbCon = DriverManager.getConnection(host, user, password);
             }
             catch(Exception e)
             {
-            	dbCon = DriverManager.getConnection(dbURL_secondary, user, passw);
+            	// retry on any exception to connect
+            	dbCon = DriverManager.getConnection(host, user, password);
             }
         }
         catch(Exception e)
         {
         	dbCon = null; 
-        	throw new RuntimeException("Can't connect to database.", e);
+        	throw new RuntimeException("JDBC svc: Can't connect to database server", e);
         }
 	}
 	
@@ -51,7 +93,7 @@ public abstract class jdbcConnector implements AutoCloseable{
     	}
     	catch (Exception e)
     	{
-    		// we don't popup any exception, its always ok
+    		// we don't popup any exception, its (maybe) always ok (because, we can have an invalid connection)
     	}
     	dbCon = null;
 	}
