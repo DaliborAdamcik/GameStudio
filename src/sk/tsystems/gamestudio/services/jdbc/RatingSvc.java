@@ -19,9 +19,9 @@ public class RatingSvc extends jdbcConnector implements RatingService {
 	private final String SELECT_GA_Q = "SELECT (SELECT SUM(rating) FROM RATING WHERE GAMEID = ?), (SELECT COUNT(*) FROM RATING) FROM DUAL";
 
 		
-	public RatingSvc(UserService users) {
+	public RatingSvc() {
 		super();
-		this.users = users;
+		this.users = UserSvc.getInstance();
 	}
 
 	@Override

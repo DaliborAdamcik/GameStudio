@@ -13,8 +13,11 @@ public class GameEntity {
 	
 	@Column(name = "GAMENAME")	
 	private String name;
-	@Column(name = "RUNNABLE")	
+	@Column(name = "RUNNABLE")	// for command line and graphical UI
 	private Class<?> runnable = null;
+	
+	@Column(name = "SERVLETPATH")	
+	private String servletpath = null; 
 
 	public GameEntity() // constructor for JPA
 	{
@@ -76,6 +79,15 @@ public class GameEntity {
 	public void setID(int id) {
 		this.id = id;
 	}
+	
+	public String getServletPath() { // this is used in dynamic WEB pages to reach servlets by ajax
+		return servletpath;
+	}
+
+	public void setServletPath(String servletpath) {
+		this.servletpath = servletpath;
+	}
+	
 }
 
 /*			Class<?> clz = Class.forName(ga.className());

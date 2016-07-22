@@ -17,9 +17,9 @@ public class ScoreSvc extends jdbcConnector implements ScoreService {
 	private final String SELECT_Q = "SELECT USRID, DAT, SCORE FROM SCORE WHERE GAMEID = ? AND ROWNUM <= 10  ORDER BY SCORE.SCORE DESC";
 	private UserService user;
 
-	public ScoreSvc(UserService user) {
+	public ScoreSvc() {
 		super();
-		this.user = user;
+		this.user = UserSvc.getInstance();
 	}
 
 	@Override

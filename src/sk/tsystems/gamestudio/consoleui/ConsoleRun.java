@@ -7,21 +7,56 @@ import sk.tsystems.gamestudio.services.CommentService;
 import sk.tsystems.gamestudio.services.ScoreService;
 
 
-public class ConsoleRun {
+public class ConsoleRun{
 
 	public static void main(String[] args) {
+		String driver = "jpa"; // default driver for use with application
+		if(args.length>0)
+		{
+			switch (args[0].toLowerCase()) {
+			case "jpa":
+				driver = "jpa";
+				break;
+
+			case "jdbc":
+				driver = "jdbc";
+				break;
+
+			default:
+				System.err.printf("No suitable driver found: %s\n\t *Please specify a valid driver or\t\tleave application parameters empty.\n" +args[0]);
+				break;
+			}
+		}
+		
+		String drivercls = String.format("sk.tsystems.gamestudio.services.%s.", driver);
+		System.err.printf("Using driver: %s (%s*)\n", driver.toUpperCase(), drivercls);
+		
+		Class<?> gameCon = null;
+		Class<?> userCon = null;
+		Class<?> commCon = null;
+		Class<?> scorCon = null;
+		Class<?> rateCon = null;
+		
+		try
+		{
+			gameCon = Class.forName(drivercls+"GameSvc");
+			userCon = Class.forName(drivercls+"UserSvc");
+			commCon = Class.forName(drivercls+"CommentSvc");
+			scorCon = Class.forName(drivercls+"ScoreSvc");
+			rateCon = Class.forName(drivercls+"RatingSvc");
+		}
+		catch(SecurityException | ClassNotFoundException e)
+		{
+			e.printStackTrace();
+			return;
+		}
+		
 		try(
-				/*GameService game = new sk.tsystems.gamestudio.services.jpa.GameSvc();
-				UserService user = new sk.tsystems.gamestudio.services.jpa.UserSvc();
-				CommentService comme = new sk.tsystems.gamestudio.services.jpa.CommentSvc();
-				ScoreService score =  new sk.tsystems.gamestudio.services.jpa.ScoreSvc();
-				RatingService rating = new sk.tsystems.gamestudio.services.jpa.RatingSvc();
-					*/			
-				GameService game = new sk.tsystems.gamestudio.services.jdbc.GameSvc();
-				UserService user = new sk.tsystems.gamestudio.services.jdbc.UserSvc();
-				CommentService comme = new sk.tsystems.gamestudio.services.jdbc.CommentSvc(user, game);
-				ScoreService score =  new sk.tsystems.gamestudio.services.jdbc.ScoreSvc(user);
-				RatingService rating = new sk.tsystems.gamestudio.services.jdbc.RatingSvc(user);
+				GameService game = (GameService) gameCon.newInstance();
+				UserService user = (UserService) userCon.newInstance();
+				CommentService comme = (CommentService) commCon.newInstance();
+				ScoreService score =  (ScoreService) scorCon.newInstance();
+				RatingService rating = (RatingService) rateCon.newInstance();
 			)
 		{
 			if(game.listGames().isEmpty()) // we need to create games 
@@ -50,5 +85,4 @@ public class ConsoleRun {
 			e.printStackTrace();
 		}
 	}
-
 }

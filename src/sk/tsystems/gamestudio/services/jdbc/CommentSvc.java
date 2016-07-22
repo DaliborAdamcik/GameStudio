@@ -19,10 +19,10 @@ public class CommentSvc extends jdbcConnector implements CommentService {
 	private GameService game;
 	private int limit = 6;
 	
-	public CommentSvc(UserService user, GameService game) {
+	public CommentSvc() {
 		super();
-		this.user = user;
-		this.game = game;
+		this.user = UserSvc.getInstance();
+		this.game = GameSvc.getInstance();
 	}
 
 	@Override
