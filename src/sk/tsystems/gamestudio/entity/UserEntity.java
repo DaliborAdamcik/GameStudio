@@ -1,12 +1,8 @@
 package sk.tsystems.gamestudio.entity;
-
 import javax.persistence.*;
-
-import sk.tsystems.gamestudio.services.sorm.SORMTable;
 
 @Entity
 @Table(name="JPA_USER")
-@SORMTable(value="SORM_USER")
 public class UserEntity {
 	@Id
 	@Column(name = "USRID")

@@ -10,15 +10,6 @@ import sk.tsystems.gamestudio.services.ScoreService;
 public class ConsoleRun {
 
 	public static void main(String[] args) {
-
-		sk.tsystems.gamestudio.services.sorm.SORM srm = 
-		new sk.tsystems.gamestudio.services.sorm.SORM();
-		
-		System.exit(0);
-		
-		
-		
-		
 		try(
 				GameService game = new sk.tsystems.gamestudio.services.jpa.GameSvc();
 				UserService user = new sk.tsystems.gamestudio.services.jpa.UserSvc();
