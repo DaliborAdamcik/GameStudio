@@ -45,4 +45,17 @@ public class GameSvc extends JpaConnector implements GameService {
 		return true; // TODO
 	}
 
+	@Override
+	public GameEntity getGameByLet(String name) {
+		try
+		{
+			EntityManager em = getEntityManager();
+			Query que = em.createQuery("SELECT g FROM GameEntity g WHERE g.servletpath = :svp").setParameter("svp", name);
+			return (GameEntity) que.getSingleResult();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+	}
+
 }

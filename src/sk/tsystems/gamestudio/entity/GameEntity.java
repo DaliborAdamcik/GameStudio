@@ -87,6 +87,12 @@ public class GameEntity {
 	public void setServletPath(String servletpath) {
 		this.servletpath = servletpath;
 	}
+
+	@Override
+	public String toString() {
+		return "GameEntity [id=" + id + ", name=" + name + ", runnable=" + runnable + ", servletpath=" + servletpath
+				+ "]";
+	}
 	
 }
 

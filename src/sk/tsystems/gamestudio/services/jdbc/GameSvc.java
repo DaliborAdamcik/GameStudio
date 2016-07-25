@@ -11,6 +11,7 @@ import sk.tsystems.gamestudio.services.GameService;
 public class GameSvc extends jdbcConnector implements GameService {
 	private final String SELECT_G = "SELECT GAMEID, GNAME, SURL, RUNCLS FROM GAME WHERE GAMEID = ?";
 	private final String SELECT_L = "SELECT GAMEID FROM GAME";
+	private final String SELECT_ILN = "SELECT GAMEID FROM GAME WHERE SURL = ?'";
 	private final String INSERT_Q = "INSERT INTO GAME (GNAME, GAMEID, RUNCLS, SURL) VALUES (?, GAMEID_SEQ.nextval, ?, ?)";
 	private static GameService instance = null; 
 	
@@ -114,6 +115,26 @@ public class GameSvc extends jdbcConnector implements GameService {
         	e.printStackTrace();
 		}
         return false;
+	}
+
+	@Override
+	public GameEntity getGameByLet(String name) {
+		
+		
+		try(PreparedStatement stmt = this.conn().prepareStatement(SELECT_ILN))
+        {
+			stmt.setString(1, name);
+			
+        	try(ResultSet rs = stmt.executeQuery())
+        	{
+	        	if(rs.next())
+	        		return getGame(rs.getInt(1));
+        	}
+        } catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 }
