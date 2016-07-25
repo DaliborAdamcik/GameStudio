@@ -112,7 +112,7 @@ public class ConsoleUI extends ConsoleInput {
 		System.out.println("\tr: Refresh game list");
 		
 		for(GameEntity game: gamelist)
-			System.out.printf("\t%2d: RUN %s game (id: %d, cls: %s) rating %f\r\n", optcount++, game.getName(), game.getID(), game.className(), ratings.gameRating(game));
+			System.out.printf("\t%2d: RUN %s game (id: %d, cls: %s, let: %s) rating %f\r\n", optcount++, game.getName(), game.getID(), game.className(), game.getServletPath(), ratings.gameRating(game));
 	}
 	
 	private Object getMenuOption(int maxmenu)

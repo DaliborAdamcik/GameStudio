@@ -63,20 +63,21 @@ public class ConsoleRun{
 			{
 				GameEntity ga = new GameEntity(0, "Minesweeper");
 				ga.setRunnable(sk.tsystems.gamestudio.game.minesweeper.Minesweeper.class);
+				ga.setServletPath("MinesWeb");
 				game.addGame(ga);
 				
 				ga = new GameEntity(0, "Stones");
 				ga.setRunnable(sk.tsystems.gamestudio.game.stones.ui.StonesUI.class);
+				ga.setServletPath("stones");
 				game.addGame(ga);
 
 				ga = new GameEntity(0, "Guess the number");
 				ga.setRunnable(sk.tsystems.gamestudio.game.guessnumber.ui.GuesNumRun.class);
+				ga.setServletPath("Guess");
 				game.addGame(ga);
 
 				
 			}
-			
-			System.out.println(sk.tsystems.gamestudio.game.stones.ui.StonesUI.class.getName());
 			
 			ConsoleUI ui = new ConsoleUI(game, user, comme, score, rating);
 			ui.run();
