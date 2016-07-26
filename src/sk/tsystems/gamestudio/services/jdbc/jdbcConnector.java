@@ -8,12 +8,12 @@ import java.util.Properties;
 
 public abstract class jdbcConnector implements AutoCloseable{
 	// configuration for database connection  
-	private static String host = null;
-	private static String user = null;
-	private static String password = null;
-	private static int timeout = 10; // 10 seconds default timeout for verify delay of connection
-	private static boolean configurationLoaded = false;
-	private static Connection dbCon = null; // an connection to database  
+	private String host = null;
+	private String user = null;
+	private String password = null;
+	private int timeout = 10; // 10 seconds default timeout for verify delay of connection
+	private boolean configurationLoaded = false;
+	private Connection dbCon = null; // an connection to database  
 	
 	
 	public jdbcConnector() {

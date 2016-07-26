@@ -42,7 +42,10 @@ public class UserSvc extends jdbcConnector implements UserService {
         	try(ResultSet rs = stmt.executeQuery())
         	{
 	        	if(rs.next())
-	        		return new UserEntity(rs.getInt(1), rs.getString(2)); 
+	        	{	
+	        		UserEntity usr = new UserEntity(rs.getInt(1), rs.getString(2)); 
+	        		return usr;
+	        	}
         	}
         } catch (SQLException e) {
 			e.printStackTrace();
@@ -84,7 +87,10 @@ public class UserSvc extends jdbcConnector implements UserService {
 	        stmt.setString(1, name);
 
 	        if(stmt.executeUpdate()>0)
-	        	return getUser(name);
+	        {
+	        	UserEntity usr = getUser(name); 
+	        	return usr;
+	        }
         } catch (SQLException e) {
         	e.printStackTrace();
 		}
