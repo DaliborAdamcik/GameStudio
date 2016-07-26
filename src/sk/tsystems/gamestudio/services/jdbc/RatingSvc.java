@@ -86,7 +86,7 @@ public class RatingSvc extends jdbcConnector implements RatingService {
         	try(ResultSet rs = stmt.executeQuery())
         	{
 	        	if(rs.next() && rs.getInt(2)>0)
-        			return rs.getInt(1) / rs.getInt(2);
+        			return rs.getDouble(1) / rs.getInt(2);
         	}
         } catch (SQLException e) {
 			e.printStackTrace();
