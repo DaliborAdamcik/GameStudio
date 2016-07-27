@@ -12,6 +12,9 @@ public class UserEntity {
 	@Column(name = "USRNAME")	
 	private String name;
 	
+	@Column(name = "PASSW")	
+	private String password;
+	
 	public UserEntity() // constructor for JPA
 	{
 		this(0, "");
@@ -35,6 +38,14 @@ public class UserEntity {
 	@Override
 	public String toString() {
 		return "UserEntity [id=" + id + ", name=" + name + "]";
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

@@ -35,8 +35,11 @@ public class ConsoleUI extends ConsoleInput {
 	
 	public void run()
 	{
-		users.auth(askMyName()); // TODO what to do on failure?
-		
+		while(!users.auth(askMyName(), "1234")) {// TODO what to do on failure?
+			System.out.println("Bad name or password (password is hardtyped 1234)");
+			if(!readYN("Retry login"))
+				return;
+		}
 		System.out.println(":>> "+users.me().getName()+" welcome in game center!");
 		
 		boolean running = true;

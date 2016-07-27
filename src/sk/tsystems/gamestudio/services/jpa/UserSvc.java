@@ -15,8 +15,8 @@ public class UserSvc extends JpaConnector implements UserService {
 	}
 
 	@Override
-	public boolean auth(String name) {
-		UserEntity usr = getUser(name);
+	public boolean auth(String name, String password) { // TODO temporary auth  
+		UserEntity usr = getUser(name); 
 		if(usr==null) // TODO this time, we aDD any user
 		{
 			usr = new UserEntity(0,name);
@@ -71,6 +71,16 @@ public class UserSvc extends JpaConnector implements UserService {
 		em.persist(usr);
 		commitTransaction();
 		return usr;
+	}
+
+	@Override
+	public void setCurrUser(UserEntity user) {
+		this.current = user;
+	}
+
+	@Override
+	public boolean updateUser(UserEntity user) {
+		throw new RuntimeException("Uimplemented error updateuser JPA");
 	}
 
 }

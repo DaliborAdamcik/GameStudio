@@ -7,9 +7,10 @@ import sk.tsystems.gamestudio.entity.UserEntity;
 import sk.tsystems.gamestudio.services.UserService;
 
 public class UserSvc extends jdbcConnector implements UserService {
-	private final String SELECT_QI = "SELECT USRID, UNAME FROM USRS WHERE USRID = ?";
-	private final String SELECT_QN = "SELECT USRID, UNAME FROM USRS WHERE UNAME = ?";
+	private final String SELECT_QI = "SELECT USRID, UNAME, PWD FROM USRS WHERE USRID = ?";
+	private final String SELECT_QN = "SELECT USRID, UNAME, PWD FROM USRS WHERE UNAME = ?";
 	private final String INSERT_Q = "INSERT INTO USRS (UNAME, USRID, PWD, EMAIL) VALUES (?, USRID_SEQ.nextval, '1234', 'newusr'||USRID_SEQ.nextval||'@gamestudio' )";
+	private final String UPDATE_Q = "UPDATE USRS SET UNAME = ?, PWD = ? WHERE USRID = ?";
 	private static UserService instance = null;
 	
 	private UserEntity myAcc = null;
@@ -44,6 +45,7 @@ public class UserSvc extends jdbcConnector implements UserService {
 	        	if(rs.next())
 	        	{	
 	        		UserEntity usr = new UserEntity(rs.getInt(1), rs.getString(2)); 
+	        		usr.setPassword(rs.getString(3));
 	        		return usr;
 	        	}
         	}
@@ -70,11 +72,12 @@ public class UserSvc extends jdbcConnector implements UserService {
 	}
 
 	@Override
-	public boolean auth(String name) { //TODO as simple as can be
+	public boolean auth(String name, String password) {
 		UserEntity usr = getUser(name);
 		
-		if(usr==null) 
+		if(usr==null || usr.getPassword().compareTo(password)!=0) 
 			return false;
+		
 		
 		myAcc = usr;
 		return true;
@@ -97,5 +100,25 @@ public class UserSvc extends jdbcConnector implements UserService {
         return null;
 	}
 
+	@Override
+	public void setCurrUser(UserEntity user) {
+		this.myAcc = user;
+	}
+
+	@Override
+	public boolean updateUser(UserEntity user) {
+        try(PreparedStatement stmt = this.conn().prepareStatement(UPDATE_Q))
+        {
+	        stmt.setString(1, user.getName());
+	        stmt.setString(2, user.getPassword());
+	        stmt.setInt(3, user.getID());
+	        if(stmt.executeUpdate()>0)
+	        	return true;
+        } catch (SQLException e) {
+        	e.printStackTrace();
+		}
+        
+        return false;
+	}
 
 }
