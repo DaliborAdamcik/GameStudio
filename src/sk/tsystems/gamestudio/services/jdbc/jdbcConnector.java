@@ -108,7 +108,7 @@ public abstract class jdbcConnector implements AutoCloseable{
 		return false;
 	}
 	
-	public Connection conn()
+	synchronized public Connection conn()
 	{
 		if( !verifyConn() )
 			establishConn();
@@ -117,7 +117,7 @@ public abstract class jdbcConnector implements AutoCloseable{
 	}
 
 	@Override
-	public void close() throws Exception {
+	synchronized public void close() throws Exception {
 		tryCloseDBConn();
 	}
 }	

@@ -5,13 +5,16 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 abstract class JpaConnector implements AutoCloseable {
-	/* TODO upravit komentar
-	 * postarat sa o ziskanie factory umoznit ziskanie entity manager zacatie
-	 * transakcie, ukoncenie transakcie uzatvorit faktory aj entity manager
-	 */
-
+	// TODO non thread safe?? !!!
 	private static EntityManagerFactory factory;
 	private static EntityManager entityManager;
+	private static int connCount = 0; 
+	JpaConnector() {
+		super();
+		connCount++; // increment connections to JPA, prevent closing on work
+		System.err.printf("*** info: HIBERNATE connection count: %d <-------\n", connCount);
+	}
+
 
 	private static EntityManagerFactory getFactory() {
 		if (factory == null || !factory.isOpen()) {
@@ -20,18 +23,19 @@ abstract class JpaConnector implements AutoCloseable {
 		return factory;
 	}
 
-	EntityManager getEntityManager() {
+	synchronized EntityManager getEntityManager() {
 		if (entityManager == null || !entityManager.isOpen()) {
 			entityManager = getFactory().createEntityManager();
 		}
 		return entityManager;
 	}
 
-	void beginTransaction() {
+
+	synchronized void beginTransaction() {
 		getEntityManager().getTransaction().begin();
 	}
 
-	void commitTransaction() {
+	synchronized void commitTransaction() {
 		getEntityManager().getTransaction().commit();
 	}
 
@@ -48,7 +52,10 @@ abstract class JpaConnector implements AutoCloseable {
 	}
 	
 	@Override
-	public void close() throws Exception {
+	synchronized public void close() throws Exception {
+		System.err.printf("*** info: HIBERNATE connection count: %d <-------\n", connCount-1);
+		if(--connCount>0)
+			return;
 		closeEntityManager();
 		closeEntityManagerFactory();
 	}

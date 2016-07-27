@@ -14,7 +14,7 @@ import sk.tsystems.gamestudio.services.UserService;
 
 public class ScoreSvc extends jdbcConnector implements ScoreService {
 	private final String INSERT_Q = "INSERT INTO SCORE (USRID, GAMEID, DAT, SCORE) VALUES (?, ?, ?, ?)";
-	private final String SELECT_Q = "SELECT USRID, DAT, SCORE FROM SCORE WHERE GAMEID = ? AND ROWNUM <= 10  ORDER BY SCORE.SCORE DESC";
+	private final String SELECT_Q = "SELECT * FROM (SELECT USRID, DAT, SCORE FROM SCORE WHERE GAMEID = ? ORDER BY SCORE.SCORE DESC) WHERE ROWNUM <= 10  ";
 	private UserService user;
 
 	public ScoreSvc() {
