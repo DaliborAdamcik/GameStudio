@@ -74,7 +74,7 @@ public class UserSvc extends jdbcConnector implements UserService {
 		UserEntity usr = getUser(name);
 		
 		if(usr==null) 
-			usr = addUser(name);
+			return false;
 		
 		myAcc = usr;
 		return true;
@@ -85,7 +85,6 @@ public class UserSvc extends jdbcConnector implements UserService {
         try(PreparedStatement stmt = this.conn().prepareStatement(INSERT_Q))
         {
 	        stmt.setString(1, name);
-
 	        if(stmt.executeUpdate()>0)
 	        {
 	        	UserEntity usr = getUser(name); 
