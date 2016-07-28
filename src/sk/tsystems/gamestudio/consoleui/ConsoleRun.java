@@ -10,6 +10,11 @@ import sk.tsystems.gamestudio.services.ScoreService;
 public class ConsoleRun{
 
 	public static void main(String[] args) {
+		
+		/*StatisticsDTO dto = new StatisticsDTO();
+		System.out.println(dto);
+		System.exit(0);*/
+		
 		String driver = "jpa"; // default driver for use with application
 		if(args.length>0)
 		{
