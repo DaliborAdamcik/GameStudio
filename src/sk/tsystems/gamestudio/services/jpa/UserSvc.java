@@ -16,18 +16,20 @@ public class UserSvc extends JpaConnector implements UserService {
 
 	@Override
 	public boolean auth(String name, String password) { // TODO temporary auth  
-		UserEntity usr = getUser(name); 
-		if(usr==null) // TODO this time, we aDD any user
+		try 
 		{
-			usr = new UserEntity(0,name);
-			EntityManager em = getEntityManager();
-			beginTransaction();
-			em.persist(usr);
-			commitTransaction();
+			UserEntity usr = getUser(name);
+			
+			if(usr.getPassword().compareTo(password)==0)
+			{
+				setCurrUser(usr);
+				return true;
+			}
 		}
-		current = usr;
-		
-		return true; // TODO
+		catch (NullPointerException e)
+		{
+		}
+		return false;
 	}
 
 	@Override
@@ -80,7 +82,19 @@ public class UserSvc extends JpaConnector implements UserService {
 
 	@Override
 	public boolean updateUser(UserEntity user) {
-		throw new RuntimeException("Uimplemented error updateuser JPA");
+		try
+		{
+			EntityManager em = getEntityManager();
+			beginTransaction();
+			em.persist(user);
+			commitTransaction();
+			return true;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 }

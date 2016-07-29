@@ -35,11 +35,17 @@ public class ConsoleUI extends ConsoleInput {
 	
 	public void run()
 	{
-		while(!users.auth(askMyName(), "1234")) {// TODO what to do on failure?
-			System.out.println("Bad name or password (password is hardtyped 1234)");
-			if(!readYN("Retry login"))
-				return;
+		String[] asks = null; 
+		do {
+			if(asks!=null)
+			{
+				System.out.println("*** Bad name or password");
+				if(!readYN("Retry login"))
+					return;
+			}
+			asks = askMyName();
 		}
+		while (!users.auth(asks[0], asks[1]));
 		System.out.println(":>> "+users.me().getName()+" welcome in game center!");
 		
 		boolean running = true;
@@ -64,6 +70,9 @@ public class ConsoleUI extends ConsoleInput {
 					case 'r': // refresh game list
 						System.out.println(":: refresh game list");
 						gamelist = games.listGames();
+						break;
+					case 'c': 
+						changepass();
 						break;
 						
 						
@@ -113,6 +122,7 @@ public class ConsoleUI extends ConsoleInput {
 		int optcount = 1;
 		System.out.println("\tq: Quit game studio");
 		System.out.println("\tr: Refresh game list");
+		System.out.println("\tc: Change password");
 		
 		for(GameEntity game: gamelist)
 			System.out.printf("\t%2d: RUN %s game (id: %d, cls: %s, let: %s) rating %f\r\n", optcount++, game.getName(), game.getID(), game.className(), game.getServletPath(), ratings.gameRating(game));
@@ -144,14 +154,21 @@ public class ConsoleUI extends ConsoleInput {
 		while(true);
 	}
 	
-	private String askMyName()
+	private String[] askMyName()
 	{
+		String[] res = new String[2];
 		System.out.println("Sign in GameCenter---->");
 		System.out.print("User name (default 'dalik'): ");
-		String name = this.readLine().trim(); // TODO check name for white spaces
-		if(name.length()==0)
-			return "dalik";
-		return name;
+		res[0]= this.readLine().trim(); // TODO check name for white spaces
+		if(res[0].length()==0)
+			res[0]= "dalik";
+
+		System.out.print("Password: (default '1234'): ");
+		res[1]= this.readLine().trim(); 
+		if(res[1].length()==0)
+			res[1]= "1234";
+		
+		return res;
 	}
 	
 	private void runGame(GameEntity game)
@@ -239,6 +256,30 @@ public class ConsoleUI extends ConsoleInput {
 			printScore(score, cnt++);
 		}
 		
+	}
+	
+	private void changepass()
+	{
+		System.out.println("==== Change password ===\nOld password: ");
+		String pass = readLine().trim();
+		if(pass.compareTo(users.me().getPassword())!=0)
+		{
+			System.out.println("** Bad old password");
+			return;
+		}
+
+		System.out.println("New password: ");
+		pass = readLine().trim();
+		if(pass.length()<3)
+		{
+			System.out.println("** new password must be at least 3 characters long");
+			return;
+		}
+		users.me().setPassword(pass);
+		if(users.updateUser(users.me()))
+			System.out.println("New password set");
+		else
+			System.out.println("** failed to save new password");
 	}
 	
 
