@@ -81,6 +81,10 @@ public class ConsoleRun{
 				ga.setServletPath("Guess");
 				game.addGame(ga);
 
+				ga = new GameEntity(0, "Memorize");
+				//ga.setRunnable(sk.tsystems.gamestudio.game.guessnumber.ui.GuesNumRun.class);
+				ga.setServletPath("memorize");
+				game.addGame(ga);
 				
 			}
 			
