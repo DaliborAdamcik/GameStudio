@@ -14,11 +14,11 @@ public class CreatorOracle extends jdbcConnector {
 	private int succ = 0;
 	private int ignore = 0;
 	
-	CreatorOracle() {
+	public CreatorOracle() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	void run()
+	public void run()
 	{
 		try
 		{
