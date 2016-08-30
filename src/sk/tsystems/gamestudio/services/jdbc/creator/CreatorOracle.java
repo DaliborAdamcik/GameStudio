@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import sk.tsystems.gamestudio.services.jdbc.jdbcConnector;
 
-class CreatorOracle extends jdbcConnector {
+public class CreatorOracle extends jdbcConnector {
 	private int numque = 0;
 	private int succ = 0;
 	private int ignore = 0;
